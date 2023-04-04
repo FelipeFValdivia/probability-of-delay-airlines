@@ -42,7 +42,7 @@ def plot_multiple_barchar(dataframe, columns):
     plt.show()
 
 
-def get_temp_f(df_column):
+def get_high_season(df_column):
     return list(
         map(
             lambda dt: compare_high_season_dates(dt), 
