@@ -2,13 +2,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 from datetime import datetime, time
 
+#Print number of ocurrencies for each value in each column
 def print_ocurrencies(dataframe, columns, text="Ocurrencies for {} column"):
     for column in columns:
         print(text.format(column))
         print(dataframe[column].value_counts())
         print("\n")
 
-
+#Plot Bar Char with different size depending on the amount of values per column
 def plot_barchar(value_count_dict, column, label="{} distribution"):
 
     column_values = list(value_count_dict.keys())
@@ -25,7 +26,6 @@ def plot_barchar(value_count_dict, column, label="{} distribution"):
 
     fig, ax = plt.subplots(figsize = size)
 
-    # Example data
     y_pos = np.arange(len(column_values))
     ocurrencies = list(value_count_dict.values())
     ax.barh(y_pos, ocurrencies, align = 'center')
@@ -33,6 +33,7 @@ def plot_barchar(value_count_dict, column, label="{} distribution"):
     ax.invert_yaxis()  # labels read top-to-bottom\
     ax.set_title(label.format(column)) 
 
+#Plot barchar grouped to show two bar for differents class together
 def plot_grouped_barchar(first_dataframe, second_dataframe, columns):
     for column in columns:
         fdf_values = first_dataframe[column].value_counts().to_dict()
@@ -50,12 +51,12 @@ def plot_grouped_barchar(first_dataframe, second_dataframe, columns):
         plt.title("{} delayed compared".format(column))
         plt.show()
 
-
+#Plot bar char using the power of pandas dataframe
 def plot_grouped_barchar_withpd(df, columns):
     df_gb = df.groupby(columns).size().unstack(level=1)
     df_gb.plot(kind = 'bar')
 
-
+#Used to call once the function with a list of columns
 def plot_multiple_barchar(dataframe, columns, label="{} distribution"):
     for column in columns:
         value_count_dict = dataframe[column].value_counts().to_dict()
@@ -63,7 +64,7 @@ def plot_multiple_barchar(dataframe, columns, label="{} distribution"):
         plot_barchar(value_count_dict, column, label)
     plt.show()
 
-
+#Get high season encoded, used to build the high_season column
 def get_high_season(df_column):
     return list(
         map(
@@ -72,7 +73,7 @@ def get_high_season(df_column):
         )
     )
 
-
+#The comparission to get high_season column values
 def compare_high_season_dates(string_dt):
     dt = datetime.strptime(
                 string_dt,
@@ -87,7 +88,7 @@ def compare_high_season_dates(string_dt):
     else:
         return 0
 
-
+#Get high season encoded, used to build the period_day column
 def get_period_day(df_column):
     return list(
         map(
@@ -96,6 +97,7 @@ def get_period_day(df_column):
         )
     )
 
+#The comparission to get period_day column values
 def compare_times_of_day(string_dt):
     dt = datetime.strptime(
                 string_dt,
@@ -108,6 +110,8 @@ def compare_times_of_day(string_dt):
     else:
         return "afternoon"
 
+#To get the rate of delayed flights with the equation:
+#number of delayed_flights / number of total flights
 def get_ratios(delayed_flights, in_time_flights, columns):
     all_ratios = {}
     for column in columns:
